@@ -30,7 +30,7 @@ exports.uploadImage = async (req, res, next) => {
   const newImage = new Image({
     fileName: req.file.originalname,
     filter: req.body.filter,
-    imageUrl: `https://storage.googleapis.com/${storage.name}/${file.originalname}`, // Assuming you save images in a folder named 'uploads'
+    imageUrl: encodeURI(`https://storage.googleapis.com/${storage.name}/${file.originalname}`), 
   });
   await newImage.save();
 
@@ -58,27 +58,3 @@ exports.getImages = async (req, res) => {
     return res.status(500).send({ error: error.message });
   }
 };
-
-
-// @desc    Get All images
-// @route   GET /api/v1/images/getAll
-exports.deleteImages = async (req, res) => {
-  try {
-
-    const [files] = await storage.getFiles();
-    await Promise.all(
-      files.map(async (file) => {
-        await file.delete();
-      })
-    );
-    await Image.deleteMany();
-    res.status(200).json({
-      success: true,
-      data: []
-    })
-  } catch (err) {
-    res.status(400).json({
-      success: false
-    })
-  }
-}

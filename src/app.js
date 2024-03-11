@@ -18,6 +18,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+// Enable CORS
+app.use(cors());
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,8 +30,6 @@ const images = require('./routes/imageRoutes.js');
 // Mount routers
 app.use('/api/v1', images);
 
-// Enable CORS
-app.use(cors());
 
 const PORT = process.env.PORT || 8000;
 
